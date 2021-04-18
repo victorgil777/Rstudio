@@ -1,0 +1,28 @@
+Library(caret)
+Library(class)
+
+df= data.frame(Resultado_final,Edad,Total_clics,Creditos_aprobados)
+df$Edad.z <-scale(df$Edad)
+df$Total_clics.z <-scale(df$Total_clics)
+df$Creditos_aprobados.z <-scale(df$Creditos_aprobados)
+set.seed(2018)
+
+t.ids <- createDataPartition(df$Resultado_final, p=0.5, list = F)
+train <- df[t.ids,]
+temp <- df[-t.ids,]
+
+v.ids <-createDataPartition(temp$Resultado_final, p=0.5, list = F)
+val <- temp[v.ids,]
+test <- temp[-v.ids,]
+pred1 <-knn(train[,2:4], val[,2:4], train[,1], k=1)
+errmat1 <- table(val$Resultado_final, pred1, dnn = c("Actual", "Predichos"))
+errmat1
+confusionMatrix(errmat1)
+
+CURVA ROCR#
+library(ROCR)
+pred2 <- prediction(as.numeric(pred1), as.numeric(val$Resultado_final))
+perf2 <- performance(pred2, "tpr", "fpr")
+plot(perf2)
+
+
