@@ -1,5 +1,5 @@
 # Rstudio
-Código Rstudio para pronosticar el desempeño estudiantil en Cursos Universitarios Virtuales a Distancia (CUVD).
+Códigos de Rstudio para pronosticar el desempeño estudiantil en Cursos Universitarios Virtuales a Distancia (CUVD).
 
 Requisitos
 
