@@ -14,7 +14,7 @@ temp <- df[-t.ids,]
 v.ids <-createDataPartition(temp$Resultado_final, p=0.5, list = F)
 val <- temp[v.ids,]
 test <- temp[-v.ids,]
-pred1 <-knn(train[,2:4], val[,2:4], train[,1], k=1)
+pred1 <-knn(train[,2:4], val[,2:4], train[,1], k=5)
 errmat1 <- table(val$Resultado_final, pred1, dnn = c("Actual", "Predichos"))
 errmat1
 confusionMatrix(errmat1)
