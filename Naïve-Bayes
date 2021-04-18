@@ -1,0 +1,10 @@
+Library(e1071)
+Library(naiveBayes)
+Library(caret)
+set.seed(2018)
+t.ids <- createDataPartition(COLOMBIA$Resultado_final, p = 0.75, list = F)
+mod <- naiveBayes(Resultado_final~ ., data = COLOMBIA[t.ids,])
+mod
+pred <- predict(mod, COLOMBIA[-t.ids,])
+tab <- table(COLOMBIA [-t.ids,]$ Resultado_final, pred, dnn = c("Actual", "Predicha "))
+confusionMatrix(tab)
