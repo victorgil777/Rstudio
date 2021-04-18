@@ -1,0 +1,29 @@
+library(neuralnet)
+scaleddata<-scale(DATASET)
+normalize <- function(x) {
+  return ((x - min(x)) / (max(x) - min(x)))
+}
+maxmindf <- as.data.frame(lapply(DATASET, normalize))
+
+# Training and Test Data
+trainset <- maxmindf[1: ,]
+testset <- maxmindf[ : n,]
+
+#Neural Network
+nn <- neuralnet(Resultado_final~Edad+Estrato+Genero+Total_clics+Creditos_aprobados, data=COLOMBIA, hidden=c(2,1), linear.output=FALSE, threshold=0.01)
+nn$result.matrix
+plot(nn)
+nn$result.matrix
+
+#Test the resulting output
+temp_test <- subset(testset, select = c("Edad","Estrato", "Genero", "Total_clics", "Creditos_aprobados"))
+head(temp_test)
+nn.results <- compute(nn, temp_test)
+results <- data.frame(actual = testset$Resultado_final, prediction = nn.results$net.result)
+
+results
+
+roundedresults<-sapply(results,round,digits=0)
+roundedresultsdf=data.frame(roundedresults)
+attach(roundedresultsdf)
+table(actual,prediction)
