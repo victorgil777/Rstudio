@@ -1,0 +1,17 @@
+library(caret)
+library(e1071)
+train <- COLOMBIA[1:380,]
+test <- COLOMBIA[381:507,]
+Sigmoide = function(x) {1/(1+exp(-x))}
+x <- seq (-5,5,0.01)
+plot(x,Sigmoide(x),col="red")
+RL_COLOMBIA <- glm(Resultado_final~Edad+Estrato+Genero+Total_clics+Creditos_aprobados, data = train, family=binomial)
+summary(RL_COLOMBIA)
+pred_RL <- predict(RL_COLOMBIA,test)
+View(pred_RL)
+plot(pred_RL,Sigmoide(pred_RL),col="blue")
+pred_RL <- ifelse(pred_RL>0.5,1,0)
+View(pred_RL)
+pred_RL <- factor(pred_RL)
+test$Resultado_final <-factor(test$Resultado_final)
+confusionMatrix(pred_RL,test$Resultado_final)
