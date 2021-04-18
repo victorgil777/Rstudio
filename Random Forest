@@ -1,0 +1,19 @@
+Library(caret)
+Library(randomForest)
+
+df= data.frame(Resultado_final,Edad,Total_clics,Creditos_aprobados,Estrato,Genero)
+
+df$Resultado_final <- factor(df$Resultado_final)
+
+set.seed(2018)
+
+training.ids <- createDataPartition(df$Resultado_final, p = 0.75, list = F)
+
+mod <-randomForest(x=df[training.ids,2:5],
+                                       y= df[training.ids, 1],
+                                       ntree = 500,
+                                       keep.forest = TRUE)
+
+pred <- predict(mod, df[-training.ids,])
+tab <- table(df [-training.ids,]$ Resultado_final, pred, dnn = c("Actual", "Predicha "))
+confusionMatrix(tab)
