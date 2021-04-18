@@ -1,0 +1,34 @@
+library(rpart)
+library(rpart.plot)
+library(caret)
+library(e1071)
+train <- COLOMBIA[1:380,]
+test <- COLOMBIA[381:507,]
+tree_COLOMBIA <- rpart(Resultado_final~Edad+Estrato+Genero+Total_clics+Creditos_aprobados, data = train)
+pred_tree <- predict(tree_COLOMBIA,test)
+View(pred_tree)
+pred_tree <- ifelse(pred_tree > 0.5,1,0)
+rpart.plot(tree_COLOMBIA)
+pred_tree <- factor(pred_tree)
+test$Resultado_final <-factor(test$Resultado_final)
+confusionMatrix(pred_tree,test$Resultado_final)
+
+Importancia de las variables#
+
+Library(rpart)
+Library(rpart.plot)
+Library(tidyverse)
+Library(dplr)
+fit <- rpart(Resultado_final~Edad+Estrato+Genero+Total_clics+Creditos_aprobados, data = COLOMBIA)
+df <- data.frame(imp = fit$variable.importance)
+df2 <- df %>% 
+tibble::rownames_to_column() %>% 
+dplyr::rename("variable" = rowname) %>% 
+dplyr::arrange(imp) %>%
+dplyr::mutate(variable = forcats::fct_inorder(variable))
+ggplot2::ggplot(df2) +
+geom_col(aes(x = variable, y = imp),
+col = "black", show.legend = F) +
+coord_flip() +
+scale_fill_grey() +
+theme_bw()
